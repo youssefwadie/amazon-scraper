@@ -8,7 +8,7 @@
     <strong>amazon may block your IP, or returns 503 service unavailable error. So, consider using a proxy for better results</strong>
 </p>
 
-# Installation
+# Installation and usage
 
 1. Install scrapy with [pip](#pip_install), [conda](#conda_install) or [micromamba](#mamba_install)
 2. `git clone https://github.com/youssefwadie/amazon-scraper.git`
@@ -16,9 +16,6 @@
 4. Edit the [query list](/amazon_scraper/spiders/amazon.py#L6)
 5. `scrapy crawl amazon -o outfile.json`
 
-```bash
-scrapy crawl amazon -o outfile.json
-```
 
 pip installation <a name="pip_install"></a>
 MacOS/Linux
