@@ -4,6 +4,7 @@
 
 <p>
     Scrape <a href="https://www.amazon.com">amazon</a> products details, output them in json format
+    <br>
     <strong>amazon may block your IP, or returns 503 service unavailable error. So, consider using a proxy for better results</strong>
 </p>
 
