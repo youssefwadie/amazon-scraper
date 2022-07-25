@@ -65,27 +65,34 @@ class AmazonSpider(scrapy.Spider):
             sizes = di.get('size_name', [])
             colors = di.get('color_name', [])
 
-        details_table = response.xpath('//*[@id="productDetails_techSpec_section_2"]/tr')
+        details = {}
+
+        details_section = response.xpath('//*[@id="poExpander"]/div[1]/div/table/tr')
+        for entry in details_section:
+            details[entry.xpath(".//td[1]/span/text()").extract_first().strip()] = entry.xpath(
+                ".//td[2]/span/text()").extract_first().strip()
+
+        information_table = response.xpath('//*[@id="productDetails_techSpec_section_2"]/tr')
         weight = None
         dimensions = None
 
-        for detail in details_table:
-            entry_details_text = detail.xpath(
+        for entry in information_table:
+            entry_text = entry.xpath(
                 ".//*[contains(@class, 'prodDetSectionEntry')]/text()").extract_first()
-            if entry_details_text is None:
+            if entry_text is None:
                 continue
-            if 'Weight' in entry_details_text:
-                weight = detail.xpath(".//*[contains(@class, 'prodDetAttrValue')]/text()").extract_first()
-            elif 'Dimensions' in entry_details_text:
-                dimensions = detail.xpath(".//*[contains(@class, 'prodDetAttrValue')]/text()").extract_first()
+            if 'Weight' in entry_text:
+                weight = entry.xpath(".//*[contains(@class, 'prodDetAttrValue')]/text()").extract_first()
+            elif 'Dimensions' in entry_text:
+                dimensions = entry.xpath(".//*[contains(@class, 'prodDetAttrValue')]/text()").extract_first()
 
         dimensions_json = {}
         if dimensions is not None:
             dimensions = to_ascii(dimensions).split('x')
             dimensions_json = {
-                'length': dimensions[0].strip(),
-                'width': dimensions[1].strip(),
-                'height': dimensions[2].split('inches')[0].strip()
+                'length': float(dimensions[0].strip()),
+                'width': float(dimensions[1].strip()),
+                'height': float(dimensions[2].split('inches')[0].strip())
             }
 
         if weight is not None:
@@ -100,5 +107,5 @@ class AmazonSpider(scrapy.Spider):
                                 filter(lambda feature: feature.strip(), features)))
 
         yield {'asin': asin, 'title': title, 'main_image': image,
-               'price': price, 'sizes': sizes, 'colors': colors, 'features': features,
+               'price': price, 'sizes': sizes, 'colors': colors, 'details': details, 'features': features,
                'list_price': list_price, 'images': images, 'dimensions': dimensions_json, 'weight': weight}
