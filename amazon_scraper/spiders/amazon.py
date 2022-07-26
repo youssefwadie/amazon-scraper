@@ -13,18 +13,6 @@ def to_ascii(string: str) -> str:
 
 class AmazonSpider(scrapy.Spider):
     name = 'amazon'
-    headers = {
-        'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.114 Safari/537.36',
-        'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-        'sec-fetch-site': 'same-origin',
-        'sec-fetch-dest': 'document',
-        'sec-fetch-mode': 'navigate',
-        'sec-fetch-user': '?1',
-        'upgrade-insecure-requests': '1',
-        'dnt': '1',
-        'referer': 'https://www.amazon.com/',
-        'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
-    }
 
     def start_requests(self):
         for query in queries:
